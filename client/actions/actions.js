@@ -63,10 +63,64 @@ export const setNewTextActionCreator = text => {
   };
 };
 
-export const setUserActionCreator = () => {
-  console.log('actions => setUserActionCreator');
+export const verifyUserActionCreator = obj => {
+  console.log('actions => verifyUserActionCreator', obj);
   return {
-    type: types.SET_USER,
-    payload: 'new user'
+    type: types.VERIFY_USER,
+    payload: obj
+  };
+};
+
+export const thunkVerifyUser = (username, password) => dispatch => {
+  let userObj = { username, password };
+
+  // send a post request with given username and password
+  fetch('/auth/login', {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    redirect: 'follow',
+    referrer: 'no-referrer',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(userObj)
+  })
+    .then(data => data.json())
+    .then(json => {
+      // if the response object has an error property, exit out of thunk
+      if (json.hasOwnProperty('error')) {
+        console.log('actions => thunkVerifyUser => json.error', json.error);
+        return dispatch(verifyUserActionCreator({ error: json.error }));
+      }
+      // if the user is verified, invoke action creator with user_id and username
+      console.log('actions => thunkVerifyUser => json', json);
+      return dispatch(
+        verifyUserActionCreator({ user_id: json.user_id, username })
+      );
+    });
+};
+
+export const logoutUserActionCreator = cb => {
+  console.log('actions => logoutUserActionCreator');
+  return {
+    type: types.LOGOUT_USER,
+    payload: 'disabling auth...'
+  };
+};
+
+export const setUsernameLoginActionCreator = text => {
+  console.log('actions => setUsernameLoginActionCreator');
+  return {
+    type: types.SET_USERNAME_LOGIN,
+    payload: text
+  };
+};
+
+export const setPasswordLoginActionCreator = text => {
+  console.log('actions => setPasswordLoginActionCreator');
+  return {
+    type: types.SET_PASSWORD_LOGIN,
+    payload: text
   };
 };

@@ -11,9 +11,10 @@ import {
 
 const mapStateToProps = store => {
   console.log('FeedContainer => mapStateToProps => store.feed', store.feed);
-  console.log('FeedContainer => mapStateToProps => store.user', store.user);
+  console.log('FeedContainer => mapStateToProps => store.auth', store.auth);
   const { postsList, newText } = store.feed;
-  const { user_id, username } = store.user;
+  // const { user_id, username } = store.user;
+  const { user_id, username } = store.auth;
   return { postsList, newText, user_id, username };
 };
 
@@ -47,6 +48,7 @@ class FeedContainer extends Component {
     console.log('FeedContainer => render', this.props.postsList);
     return (
       <div className='feed-container'>
+        <br />
         <button onClick={this.props.getPosts}>Get Posts</button>
         <PostCreator
           createPost={this.props.createPost}

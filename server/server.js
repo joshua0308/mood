@@ -1,8 +1,9 @@
 const express = require('express');
 const path = require('path');
-const postController = require('./controllers/postController');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const postController = require('./controllers/postController');
+const authController = require('./controllers/authController');
 
 const app = express();
 const port = 3000;
@@ -31,6 +32,7 @@ if (process.env.NODE_ENV !== 'development') {
 
 app.get(
   '/api/posts',
+  authController.verifyJwt,
   (req, res, next) => {
     console.log("server => app.get('/api/posts')");
     next();
@@ -38,12 +40,13 @@ app.get(
   postController.getPosts
 );
 
-app.get('/api/posts/:id', postController.getOnePost);
+app.get('/api/posts/:id', authController.verifyJwt, postController.getOnePost);
 
-app.post('/api/posts', postController.createPost);
+app.post('/api/posts', authController.verifyJwt, postController.createPost);
 
 app.delete(
   '/api/posts/:id',
+  authController.verifyJwt,
   (req, res, next) => {
     console.log("server => app.delete('/api/posts/:id')");
     next();
@@ -53,12 +56,19 @@ app.delete(
 
 app.put(
   '/api/posts/:id',
+  authController.verifyJwt,
   (req, res, next) => {
     console.log("server => app.post('/api/posts/:id')");
     next();
   },
   postController.updateOnePost
 );
+
+app.post('/auth/login', authController.verifyUser);
+
+app.post('/auth/create', authController.createUser);
+//  (req, res, next) => {
+//   res.status(200).send("server.js => app.post('/create/')");}
 
 // listen on port 3000
 app.listen(port, () => console.log(`Listening on port ${port}...`));

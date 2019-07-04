@@ -1,18 +1,10 @@
-const Pool = require('pg').Pool;
-const pool = new Pool({
-  user: 'joshuakim',
-  host: 'localhost',
-  database: 'solo-project',
-  password: 37740200,
-  port: 5432
-});
+const pool = require('../models/database');
 
 const postController = {
   createPost: (req, res) => {
     console.log('server => postController => createPost');
     const now = new Date();
     const { username, mood, journal_entry } = req.body;
-    // console.log(username, mood, journal_entry);
     pool.query(
       'insert into posts (created_on, username, mood, journal_entry) values ($1, $2, $3, $4)',
       [now, username, mood, journal_entry],

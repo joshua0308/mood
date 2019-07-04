@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
 import feedReducer from './feedReducer';
-import userReducer from './userReducer';
+import authReducer from './authReducer';
+// import userReducer from './userReducer';
 
 const reducers = combineReducers({
   feed: feedReducer,
-  user: userReducer
+  auth: authReducer
+  // user: userReducer,
 });
 
 export default reducers;

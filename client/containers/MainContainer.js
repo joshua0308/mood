@@ -10,7 +10,6 @@ class MainContainer extends Component {
   render() {
     return (
       <div className='main-container'>
-        <NavBar />
         <FeedContainer />
       </div>
     );

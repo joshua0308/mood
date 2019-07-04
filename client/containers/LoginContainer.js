@@ -1,5 +1,29 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import {
+  setUsernameLoginActionCreator,
+  setPasswordLoginActionCreator
+} from '../actions/actions';
+
+const mapStateToProps = store => {
+  console.log('LoginContainer => mapStateToProps');
+  const { usernameLogin, passwordLogin, loginErrorMessage } = store.auth;
+  return { usernameLogin, passwordLogin, loginErrorMessage };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setUsernameLogin: text => {
+      console.log('LoginContainer => mapDispatchToProps => setUsername');
+      return dispatch(setUsernameLoginActionCreator(text));
+    },
+    setPasswordLogin: text => {
+      console.log('LoginContainer => mapDispatchToProps => setPassword');
+      return dispatch(setPasswordLoginActionCreator(text));
+    }
+  };
+};
 
 class LoginContainer extends Component {
   constructor(props) {
@@ -7,31 +31,48 @@ class LoginContainer extends Component {
     this.state = {
       redirectToReferrer: false
     };
-    this.login = this.login.bind(this);
-  }
-
-  login() {
-    this.props.handleAuthenticate(() => {});
-    this.setState({ redirectToReferrer: true });
-    console.log('LoginContainer => login()', this.state.redirectToReferrer);
   }
 
   render() {
-    console.log('LoginContainer => render', this.props);
-    const { redirectToReferrer } = this.state;
+    const {
+      redirectToReferrer,
+      verifyUser,
+      setUsernameLogin,
+      setPasswordLogin,
+      usernameLogin,
+      passwordLogin,
+      loginErrorMessage
+    } = this.props;
     const { from } = this.props.location.state || { from: { pathname: '/' } };
+    if (redirectToReferrer) return <Redirect to={from} />;
 
-    if (redirectToReferrer === true) {
-      console.log('LoginContainer => redirectToReferrer === true');
-      return <Redirect to={from} />;
-    }
     return (
       <div className='login-container'>
-        <p>You must log in to view this page at {from.pathname}</p>
-        <button onClick={this.login}>Log in</button>
+        <p>
+          You must login to view the <b>{from.pathname.slice(1)}</b> page
+        </p>
+        <div className='login-form'>
+          <input
+            type='text'
+            placeholder=' username'
+            onChange={e => setUsernameLogin(e.target.value)}
+          />
+          <input
+            type='password'
+            placeholder=' password'
+            onChange={e => setPasswordLogin(e.target.value)}
+          />
+          <button onClick={() => verifyUser(usernameLogin, passwordLogin)}>
+            Log in
+          </button>
+          <p>{loginErrorMessage}</p>
+        </div>
       </div>
     );
   }
 }
 
-export default LoginContainer;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoginContainer);

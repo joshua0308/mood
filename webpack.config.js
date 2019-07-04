@@ -28,10 +28,12 @@ module.exports = {
   },
   devServer: {
     // public
+    historyApiFallback: true,
     port: 8080,
     publicPath: '/build/',
     proxy: {
-      '/api/posts': 'http://localhost:3000'
+      '/api/posts': 'http://localhost:3000',
+      '/auth/': 'http://localhost:3000'
     }
   }
 };

@@ -7,22 +7,11 @@ body {
   height: 100%;
 }
 
-#root .app .main-container {
+#root .master-container .main-container {
   height: 100%;
 }
 
-.tmp-icons {
-  /* background-color: orange; */
-  padding: 10px;
-  width: 100px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
-
-.nav-bar {
+.navbar {
   position: sticky;
   top: 0;
   display: flex;
@@ -34,6 +23,34 @@ body {
   border-color: #d6d6d6;
   border-bottom-style: solid;
   border-width: thin;
+}
+
+.navbar-logo {
+  font-size: 30px;
+  font-weight: 400;
+  margin-top: 10px;
+}
+
+.navbar-icons {
+  position: absolute;
+  bottom: 25px;
+  right: 25px;
+}
+
+.navbar-link {
+  padding: 5px;
+  margin: 5px;
+  min-width: 80px;
+  outline: none;
+  text-decoration: none;
+}
+
+.navbar-link:visited {
+  color: #000000;
+}
+
+.navbar-link:hover {
+  background-color: #eeeeee;
 }
 
 .feed-container {
@@ -114,4 +131,28 @@ body {
 
 .post-content {
   margin: 20px;
+}
+
+.login-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.login-container p,
+.login-container input,
+.login-container button {
+  margin: 5px;
+  display: block;
+  min-width: 200px;
+  height: 20px;
+}
+
+.profile-container {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
