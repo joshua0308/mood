@@ -7,7 +7,7 @@ const PostsDisplay = props => {
   let postCards = [];
   if (postsList.length > 0) {
     postCards = postsList.map((el, index) => {
-      return <PostDisplay key={`post${index}`} content={el.journal_entry} />;
+      return <PostDisplay key={`post${index}`} post={el} />;
     });
   }
   return (

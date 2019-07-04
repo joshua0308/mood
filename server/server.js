@@ -32,13 +32,33 @@ if (process.env.NODE_ENV !== 'development') {
 app.get(
   '/api/posts',
   (req, res, next) => {
-    console.log('/api/posts endpoint');
+    console.log("server => app.get('/api/posts')");
     next();
   },
   postController.getPosts
 );
 
+app.get('/api/posts/:id', postController.getOnePost);
+
 app.post('/api/posts', postController.createPost);
+
+app.delete(
+  '/api/posts/:id',
+  (req, res, next) => {
+    console.log("server => app.delete('/api/posts/:id')");
+    next();
+  },
+  postController.deleteOnePost
+);
+
+app.put(
+  '/api/posts/:id',
+  (req, res, next) => {
+    console.log("server => app.post('/api/posts/:id')");
+    next();
+  },
+  postController.updateOnePost
+);
 
 // listen on port 3000
 app.listen(port, () => console.log(`Listening on port ${port}...`));

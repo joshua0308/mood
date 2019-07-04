@@ -4,8 +4,6 @@ import PostCreator from '../components/PostCreator';
 import PostsDisplay from '../components/PostsDisplay';
 
 import {
-  getPostsActionCreator,
-  createPostActionCreator,
   setNewTextActionCreator,
   thunkGetPosts,
   thunkCreatePost
@@ -13,8 +11,10 @@ import {
 
 const mapStateToProps = store => {
   console.log('FeedContainer => mapStateToProps => store.feed', store.feed);
+  console.log('FeedContainer => mapStateToProps => store.user', store.user);
   const { postsList, newText } = store.feed;
-  return { postsList, newText };
+  const { user_id, username } = store.user;
+  return { postsList, newText, user_id, username };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -23,9 +23,9 @@ const mapDispatchToProps = dispatch => {
       console.log('FeedContainer => mapDispatchToProps => getPosts');
       return dispatch(thunkGetPosts());
     },
-    createPost: post => {
+    createPost: (entry, username) => {
       console.log('FeedContainer => mapDispatchToProps => createPost');
-      return dispatch(thunkCreatePost(post));
+      return dispatch(thunkCreatePost(entry, username));
     },
     setNewText: text => {
       console.log('FeedContainer => mapDispatchToProps => setNewText');
@@ -52,6 +52,7 @@ class FeedContainer extends Component {
           createPost={this.props.createPost}
           setNewText={this.props.setNewText}
           newText={this.props.newText}
+          username={this.props.username}
         />
         <PostsDisplay postsList={this.props.postsList} />
       </div>

@@ -21,14 +21,14 @@ export const thunkGetPosts = () => dispatch => {
     });
 };
 
-export const thunkCreatePost = newPost => dispatch => {
-  newPost = {
+export const thunkCreatePost = (entry, username) => dispatch => {
+  let newPost = {
     created_on: new Date(),
-    username: 'Josh',
+    username: username,
     mood: 'I wanna go home',
-    journal_entry: newPost
+    journal_entry: entry
   };
-  console.log(newPost);
+  console.log('actions => thunkCreatePost', entry);
 
   fetch('/api/posts', {
     method: 'POST',
@@ -60,5 +60,13 @@ export const setNewTextActionCreator = text => {
   return {
     type: types.SET_NEW_TEXT,
     payload: text
+  };
+};
+
+export const setUserActionCreator = () => {
+  console.log('actions => setUserActionCreator');
+  return {
+    type: types.SET_USER,
+    payload: 'new user'
   };
 };
