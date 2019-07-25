@@ -27,7 +27,7 @@ const NavBar = props => {
               console.log('link clicked');
             }}
           >
-            Sign out
+            Log out
           </Link>
         )}
       </div>

@@ -2,6 +2,7 @@
 export const GET_POSTS = 'GET_POSTS';
 export const CREATE_POST = 'CREATE_POST';
 export const SET_NEW_TEXT = 'SET_NEW_TEXT';
+export const DELETE_POST = 'DELETE_POST';
 
 // userReducer
 export const SET_USER = 'SET_USER';

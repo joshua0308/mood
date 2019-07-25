@@ -4,10 +4,10 @@ const postController = {
   createPost: (req, res) => {
     console.log('server => postController => createPost');
     const now = new Date();
-    const { username, mood, journal_entry } = req.body;
+    const { username, mood, journal_entry, user_id } = req.body;
     pool.query(
-      'insert into posts (created_on, username, mood, journal_entry) values ($1, $2, $3, $4)',
-      [now, username, mood, journal_entry],
+      'insert into posts (created_on, username, mood, journal_entry, user_id) values ($1, $2, $3, $4, $5)',
+      [now, username, mood, journal_entry, user_id],
       (err, result) => {
         if (err) throw err;
         return res.status(200).json(result);

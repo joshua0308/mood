@@ -38,6 +38,7 @@ body {
 }
 
 .navbar-link {
+  color: #000000;
   padding: 5px;
   margin: 5px;
   min-width: 80px;
@@ -131,7 +132,14 @@ body {
 
 .post-content {
   margin: 20px;
+  font-size: 20px;
+  font-weight: thin;
 }
+
+/* .post-content .delete-button {
+  position: absolute;
+  bottom: 10px;
+} */
 
 .login-container {
   padding: 20px;
@@ -148,6 +156,11 @@ body {
   display: block;
   min-width: 200px;
   height: 20px;
+  outline: none;
+}
+
+.login-container .error-message {
+  color: rgb(179, 27, 27);
 }
 
 .profile-container {

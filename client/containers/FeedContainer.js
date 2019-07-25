@@ -6,7 +6,8 @@ import PostsDisplay from '../components/PostsDisplay';
 import {
   setNewTextActionCreator,
   thunkGetPosts,
-  thunkCreatePost
+  thunkCreatePost,
+  thunkDeletePost
 } from '../actions/actions';
 
 const mapStateToProps = store => {
@@ -14,8 +15,8 @@ const mapStateToProps = store => {
   console.log('FeedContainer => mapStateToProps => store.auth', store.auth);
   const { postsList, newText } = store.feed;
   // const { user_id, username } = store.user;
-  const { user_id, username } = store.auth;
-  return { postsList, newText, user_id, username };
+  const { user_id: current_user_id, username } = store.auth;
+  return { postsList, newText, current_user_id, username };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -24,9 +25,13 @@ const mapDispatchToProps = dispatch => {
       console.log('FeedContainer => mapDispatchToProps => getPosts');
       return dispatch(thunkGetPosts());
     },
-    createPost: (entry, username) => {
+    createPost: (entry, username, user_id) => {
       console.log('FeedContainer => mapDispatchToProps => createPost');
-      return dispatch(thunkCreatePost(entry, username));
+      return dispatch(thunkCreatePost(entry, username, user_id));
+    },
+    deletePost: post_id => {
+      console.log('FeedContainer => mapDispatchToProps => deletePost');
+      return dispatch(thunkDeletePost(post_id));
     },
     setNewText: text => {
       console.log('FeedContainer => mapDispatchToProps => setNewText');
@@ -41,7 +46,10 @@ class FeedContainer extends Component {
   }
 
   componentDidMount() {
-    this.props.getPosts();
+    setInterval(() => {
+      this.props.getPosts();
+    }, 200);
+    // this.props.getPosts();
   }
 
   render() {
@@ -55,8 +63,13 @@ class FeedContainer extends Component {
           setNewText={this.props.setNewText}
           newText={this.props.newText}
           username={this.props.username}
+          current_user_id={this.props.current_user_id}
         />
-        <PostsDisplay postsList={this.props.postsList} />
+        <PostsDisplay
+          postsList={this.props.postsList}
+          current_user_id={this.props.current_user_id}
+          deletePost={this.props.deletePost}
+        />
       </div>
     );
   }

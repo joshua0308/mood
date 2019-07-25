@@ -5,8 +5,21 @@ const cookieParser = require('cookie-parser');
 const postController = require('./controllers/postController');
 const authController = require('./controllers/authController');
 
+// localhost port
 const app = express();
 const port = 3000;
+
+// create a server instance
+const http = require('http').createServer(app);
+
+// create a socket using the server instance
+const io = require('socket.io')(http);
+
+// socket listens for connection
+io.on('connection', function(socket) {
+  console.log('socket.io listening...');
+  socket.emit('test', {});
+});
 
 app.use(bodyParser.json());
 app.use(
@@ -65,10 +78,11 @@ app.put(
 );
 
 app.post('/auth/login', authController.verifyUser);
-
+app.post('/auth/logout', authController.removeJwt);
 app.post('/auth/create', authController.createUser);
 //  (req, res, next) => {
 //   res.status(200).send("server.js => app.post('/create/')");}
 
 // listen on port 3000
-app.listen(port, () => console.log(`Listening on port ${port}...`));
+// app.listen(port, () => console.log(`Listening on port ${port}...`));
+http.listen(port, () => console.log(`Listening on port ${port}...`));

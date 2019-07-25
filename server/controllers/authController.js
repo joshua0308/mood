@@ -1,5 +1,6 @@
 const pool = require('../models/database');
 const bcrypt = require('bcryptjs');
+const path = require('path');
 const jwt = require('jsonwebtoken');
 const SALT_WORK_FACTOR = 10;
 const jwtPrivateKey = 'jwtPrivateKey';
@@ -77,6 +78,7 @@ const authController = {
   },
 
   verifyJwt: (req, res, next) => {
+    console.log('authController => verifyJwt');
     if (req.cookies.jwtToken) {
       jwt.verify(req.cookies.jwtToken, jwtPrivateKey, function(err, decoded) {
         if (err) {
@@ -88,8 +90,14 @@ const authController = {
         next();
       });
     } else {
+      console.log('authController => verifyJwt => jwtToken not found');
       return res.status(401).json({ error: 'jwtToken not found' });
     }
+  },
+  removeJwt: (req, res, next) => {
+    console.log('authController => removeJwt');
+    res.clearCookie('jwtToken');
+    return res.status(401).json({ error: 'you are logged out' });
   }
 };
 

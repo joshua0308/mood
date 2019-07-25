@@ -16,17 +16,24 @@ export const thunkGetPosts = () => dispatch => {
     referrer: 'no-referrer'
   })
     .then(data => data.json())
-    .then(posts => {
-      return dispatch(getPostsActionCreator(posts));
+    .then(json => {
+      console.log('actions => thunkGetPosts => posts', json);
+      // if return object from AJAX request has an error in the response object, log the user out
+      if (json.hasOwnProperty('error')) {
+        console.log('actions => thunkVerifyUser => json.error', json.error);
+        return dispatch(verifyUserActionCreator({ error: json.error }));
+      }
+      return dispatch(getPostsActionCreator(json));
     });
 };
 
-export const thunkCreatePost = (entry, username) => dispatch => {
+export const thunkCreatePost = (entry, username, user_id) => dispatch => {
   let newPost = {
     created_on: new Date(),
     username: username,
     mood: 'I wanna go home',
-    journal_entry: entry
+    journal_entry: entry,
+    user_id: user_id
   };
   console.log('actions => thunkCreatePost', entry);
 
@@ -42,8 +49,12 @@ export const thunkCreatePost = (entry, username) => dispatch => {
     body: JSON.stringify(newPost)
   })
     .then(data => data.json())
-    .then(post => {
-      return dispatch(createPostActionCreator(post));
+    .then(json => {
+      if (json.hasOwnProperty('error')) {
+        console.log('actions => thunkVerifyUser => json.error', json.error);
+        return dispatch(thunkLogoutUser());
+      }
+      return dispatch(createPostActionCreator(json));
     });
 };
 
@@ -51,6 +62,37 @@ export const createPostActionCreator = post => {
   console.log('actions => createPostActionCreator');
   return {
     type: types.CREATE_POST,
+    payload: post
+  };
+};
+
+export const thunkDeletePost = post_id => dispatch => {
+  console.log('actions => thunkDeletePost', post_id);
+
+  fetch(`/api/posts/${post_id}`, {
+    method: 'DELETE',
+    mode: 'cors',
+    cache: 'no-cache',
+    redirect: 'follow',
+    referrer: 'no-referrer',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(data => data.json())
+    .then(json => {
+      if (json.hasOwnProperty('error')) {
+        console.log('actions => thunkVerifyUser => json.error', json.error);
+        return dispatch(thunkLogoutUser());
+      }
+      return dispatch(deletePostActionCreator(json));
+    });
+};
+
+export const deletePostActionCreator = post => {
+  console.log('actions => deletePostActionCreator');
+  return {
+    type: types.DELETE_POST,
     payload: post
   };
 };
@@ -88,11 +130,12 @@ export const thunkVerifyUser = (username, password) => dispatch => {
   })
     .then(data => data.json())
     .then(json => {
-      // if the response object has an error property, exit out of thunk
+      // if the response object has an error property, log the user out
       if (json.hasOwnProperty('error')) {
         console.log('actions => thunkVerifyUser => json.error', json.error);
-        return dispatch(verifyUserActionCreator({ error: json.error }));
+        return dispatch(verifyUserActionCreator(json));
       }
+
       // if the user is verified, invoke action creator with user_id and username
       console.log('actions => thunkVerifyUser => json', json);
       return dispatch(
@@ -101,12 +144,26 @@ export const thunkVerifyUser = (username, password) => dispatch => {
     });
 };
 
-export const logoutUserActionCreator = cb => {
+export const logoutUserActionCreator = () => {
   console.log('actions => logoutUserActionCreator');
   return {
     type: types.LOGOUT_USER,
-    payload: 'disabling auth...'
+    payload: 'Log out..'
   };
+};
+
+export const thunkLogoutUser = () => dispatch => {
+  fetch('/auth/logout', {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    redirect: 'follow',
+    referrer: 'no-referrer',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ logout: 'true' })
+  }).then(() => dispatch(logoutUserActionCreator()));
 };
 
 export const setUsernameLoginActionCreator = text => {

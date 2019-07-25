@@ -29,6 +29,10 @@ const feedReducer = (state = initialState, action) => {
       // postsList.unshift(action.payload);
       return { ...state };
 
+    case types.DELETE_POST:
+      console.log('feedReducer => DELETE_POSTS', state);
+      return { ...state };
+
     case types.SET_NEW_TEXT:
       console.log('feedReducer => SET_NEW_TEXT', state);
       let newText = action.payload;

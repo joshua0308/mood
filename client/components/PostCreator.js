@@ -1,7 +1,7 @@
 import React from 'react';
 
 const PostCreator = props => {
-  const { setNewText, createPost, newText, username } = props;
+  const { setNewText, createPost, newText, username, current_user_id } = props;
   console.log('PostCreator => props.username', username);
   return (
     <div className='post-creator'>
@@ -16,7 +16,7 @@ const PostCreator = props => {
         onClick={() => {
           console.log('PostCreator => onClick', newText);
           console.log('PostCreator => onClick', username);
-          createPost(newText, username);
+          createPost(newText, username, current_user_id);
           document.querySelector('textarea').value = '';
         }}
       >

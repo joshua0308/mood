@@ -1,7 +1,7 @@
 import * as types from '../constants/actionTypes';
 
 const initialState = {
-  isAuthenticated: false,
+  isAuthenticated: true,
   redirectToReferrer: false,
   usernameLogin: '',
   passwordLogin: '',
@@ -20,7 +20,6 @@ const authReducer = (state = initialState, action) => {
     loginErrorMessage;
   switch (action.type) {
     case types.VERIFY_USER:
-      // if (action.payload === 'verified') {
       if (action.payload.hasOwnProperty('error')) {
         isAuthenticated = false;
         redirectToReferrer = false;
@@ -31,14 +30,10 @@ const authReducer = (state = initialState, action) => {
         username = action.payload.username;
         user_id = action.payload.user_id;
       }
-      usernameLogin = '';
-      passwordLogin = '';
       return {
         ...state,
         isAuthenticated,
         redirectToReferrer,
-        usernameLogin,
-        passwordLogin,
         username,
         user_id,
         loginErrorMessage

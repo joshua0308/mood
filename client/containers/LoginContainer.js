@@ -65,7 +65,7 @@ class LoginContainer extends Component {
           <button onClick={() => verifyUser(usernameLogin, passwordLogin)}>
             Log in
           </button>
-          <p>{loginErrorMessage}</p>
+          <p className='error-message'>{loginErrorMessage}</p>
         </div>
       </div>
     );

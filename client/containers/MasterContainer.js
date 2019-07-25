@@ -1,25 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import io from 'socket.io-client';
 
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  Redirect,
-  withRouter,
-  Switch
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import ProfileContainer from './ProfileContainer';
 import MainContainer from './MainContainer';
 import LoginContainer from './LoginContainer';
 import PrivateRoute from './PrivateRoute';
 import NavBar from '../components/NavBar';
-import {
-  verifyUserActionCreator,
-  logoutUserActionCreator,
-  thunkVerifyUser
-} from '../actions/actions';
+import { thunkLogoutUser, thunkVerifyUser } from '../actions/actions';
 
 const mapStateToProps = store => {
   console.log('MasterContainer => mapStateToProps => store.auth', store.auth);
@@ -33,9 +23,9 @@ const mapDispatchToProps = dispatch => {
       console.log('MasterContainer => mapDispatchToProps => verifyUser');
       return dispatch(thunkVerifyUser(username, password));
     },
-    logoutUser: cb => {
+    logoutUser: () => {
       console.log('MasterContainer => mapDispatchToProps => logoutUser');
-      return dispatch(logoutUserActionCreator(cb));
+      return dispatch(thunkLogoutUser());
     }
   };
 };
@@ -43,6 +33,14 @@ const mapDispatchToProps = dispatch => {
 class MasterContainer extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    // connect to server using socket
+    const socket = io('http://localhost:3000');
+    socket.on('test', () => {
+      console.log('Client => test working');
+    });
   }
 
   render() {
